@@ -5,6 +5,7 @@ require(spdep)
 require(SpatialEpi)
 require(GISTools)
 require(rgdal)
+require(plyr)
 
 data(pennLC)
 
@@ -59,3 +60,9 @@ sar.res <- spautolm(smk~1,listw=penn.state.lw)
 sar.res
 
 sar.res$lambda + c(-2, 2) * sar.res$lambda.se
+
+# 7.6.1
+totcases <- ddply(pennLC$data, c("county"), numcolwise(sum))
+totcases <- transform(totcases, rate=10000 * cases / population)
+sar.mod <- spautolm(rate ~ sqrt(smk), listw=penn.state.lw, weight=population, data=totcases)
+summary(sar.mod)
