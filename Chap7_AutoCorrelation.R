@@ -38,6 +38,7 @@ penn.state.nb
 plot(penn.state.utm, border='lightgray')
 plot(penn.state.nb, coordinates(penn.state.utm), add=TRUE, col='red')
 
+# 7.3
 penn.state.nb2 <-poly2nb(penn.state.utm, queen=FALSE)
 plot(penn.state.utm, border='lightgrey')
 plot(penn.state.nb, coordinates(penn.state.utm), add=TRUE, col='blue', lwd=2)
@@ -54,6 +55,14 @@ plot(smk, smk.lagged.means, asp=1, xlim=range(smk), ylim=range(smk))
 abline(a=0, b=1)
 abline(v=mean(smk), lty=2)
 abline(h=mean(smk.lagged.means), lty=2)
+
+# 7.4
+
+moran.test(smk, penn.state.lw)
+moran.range <- function (lw) {
+  wmat <- listw2mat(lw)
+  return(range(eigen((wmat + t(wmat)) / 2)$values))
+}
 
 # 7.6
 sar.res <- spautolm(smk~1,listw=penn.state.lw)
